@@ -14,12 +14,15 @@ const Select = ({
   type = "normal",
 }) => {
   const [value, setValue] = useState();
+  // BOOLEEN
   const [collapsed, setCollapsed] = useState(true);
   const changeValue = (newValue) => {
-    onChange();
+    // passez la valeur
+    onChange(newValue);
     setValue(newValue);
-    setCollapsed(newValue);
-  };
+    // BOOLEEN
+    setCollapsed(true); };
+  
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
       {label && <div className="label">{label}</div>}
@@ -56,7 +59,9 @@ const Select = ({
           className={collapsed ? "open" : "close"}
           onClick={(e) => {
             e.preventDefault();
+            console.log("avant", collapsed);
             setCollapsed(!collapsed);
+            console.log("apres", !collapsed);
           }}
         >
           <Arrow />

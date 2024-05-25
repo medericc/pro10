@@ -19,13 +19,32 @@ export const api = {
 export const DataProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
+  const [last, setLast] = useState(null); // ajout état last
+
   const getData = useCallback(async () => {
+
     try {
-      setData(await api.loadData());
-    } catch (err) {
+      // mettre dans variable pour reutiliser, load data
+      const DataEvent = await api.loadData();
+      setData(DataEvent);
+   
+   
+    // Tri des événements par date
+    const events = DataEvent?.events.sort((evtA, evtB) => 
+      // ordre croissant
+      new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
+    );
+    
+    // Assignation du premier événement à setLast
+    setLast(events[0]);
+   
+    } 
+       catch (err) {
       setError(err);
     }
   }, []);
+
+
   useEffect(() => {
     if (data) return;
     getData();
@@ -37,6 +56,7 @@ export const DataProvider = ({ children }) => {
       value={{
         data,
         error,
+        last, // ajout pour qu'il soit envoyé
       }}
     >
       {children}
